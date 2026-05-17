@@ -35,6 +35,7 @@ The system consists of the following services:
 6. contact-support-team
 7. ecommerce-ui
 
+
 Databases:
 
 1. PostgreSQL
@@ -68,12 +69,10 @@ Docker Swarm was used for service orchestration and scaling.
 
 Commands used:
 
-```bash
 docker swarm init
 docker stack deploy -c docker-stack.yml ecommerce
 docker service ls
 docker service scale ecommerce_order-management=3
-```
 
 Insert screenshots:
 
