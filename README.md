@@ -158,19 +158,101 @@ Insert screenshot:
 
 # 9. SLI and SLO Design
 
-The following SLIs were defined:
+The goal is to measure system reliability from the user perspective: users should be able to open the store, browse products, check inventory, sign in, and create orders without errors or long delays.
 
-1. Availability
-2. Latency
-3. Error rate
-4. Request success rate
+## SLI 1: Availability
 
-Defined SLOs:
+Availability was selected because an e-commerce system must remain accessible for users at all times.
 
-1. Availability >= 99%
-2. Latency <= 200 ms
-3. Error rate <= 1%
-4. Request success rate >= 99%
+Definition:
+
+Availability SLI = successful_requests / total_requests
+
+Successful requests are HTTP requests that do not return server errors such as 5xx.
+
+Example Prometheus expression:
+
+1 - (
+  rate(http_requests_total{status=~"5.."}[1m])
+  /
+  rate(http_requests_total[1m])
+)
+
+SLO:
+
+99% of requests per month must be successful.
+
+Error Budget:
+
+Error Budget = 100% - 99% = 1%
+
+For a 30-day month:
+
+30 days = 43,200 minutes
+Acceptable downtime = 43,200 * 0.01 = 432 minutes
+432 minutes = 7.2 hours per month
+
+
+This means the system can be unavailable for up to approximately 7.2 hours per month before the availability SLO is breached.
+
+If backend services return errors, users cannot browse products, authenticate, check inventory, or place orders. For an e-commerce system, availability directly affects user experience and service reliability.
+
+## SLI 2: Latency
+
+Latency was selected because slow responses make the application difficult to use. Product browsing, inventory checks, and order creation should respond quickly.
+
+
+Latency SLI = requests completed under 500 ms / total requests
+
+Example Prometheus expression:
+
+sum(rate(http_request_duration_seconds_bucket{le="0.5"}[1m]))
+/
+sum(rate(http_request_duration_seconds_count[1m]))
+
+SLO:
+
+95% of requests must complete in less than 500 ms.
+
+Error Budget:
+
+Error Budget = 100% - 95% = 5%
+
+At an average load of 100 requests per minute:
+
+Monthly requests = 43,200 * 100 = 4,320,000
+Acceptable slow requests = 4,320,000 * 0.05 = 216,000
+
+This means up to 5% of requests may exceed 500 ms without breaching the latency SLO.
+
+
+## SLI 3: Error Rate
+
+Error rate measures the percentage of failed backend requests.
+
+Definition:
+
+Error Rate SLI = failed_requests / total_requests
+
+SLO:
+
+Error rate must stay below 1%.
+
+A high error rate indicates service instability, broken dependencies, database issues, failed deployments, or unavailable downstream services.
+
+## SLI 4: Request Success Rate
+
+Request success rate measures how many user requests are completed successfully across the full microservices system.
+
+Definition:
+
+Request Success Rate = successful_requests / total_requests
+
+SLO:
+
+Request success rate must be at least 99%.
+
+This SLI provides a high-level reliability indicator for the complete e-commerce application.
 
 # 10. Monitoring and Alerting
 
