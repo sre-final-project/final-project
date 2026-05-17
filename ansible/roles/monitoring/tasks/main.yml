@@ -1,0 +1,27 @@
+---
+- name: Wait for Prometheus health endpoint
+  ansible.builtin.uri:
+    url: http://localhost:9090/-/healthy
+    status_code: 200
+  register: prometheus_health
+  retries: 12
+  delay: 10
+  until: prometheus_health.status == 200
+
+- name: Wait for Grafana login page
+  ansible.builtin.uri:
+    url: http://localhost:3000/login
+    status_code: 200
+  register: grafana_health
+  retries: 12
+  delay: 10
+  until: grafana_health.status == 200
+
+- name: Wait for ecommerce UI
+  ansible.builtin.uri:
+    url: http://localhost:4000
+    status_code: 200
+  register: ui_health
+  retries: 12
+  delay: 10
+  until: ui_health.status == 200

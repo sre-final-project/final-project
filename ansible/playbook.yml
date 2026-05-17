@@ -1,0 +1,13 @@
+---
+- name: Configure and deploy ecommerce microservices stack
+  hosts: ecommerce
+  become: true
+  vars:
+    app_dir: /opt/ecommerce-microservices
+    compose_file: docker-compose.yml
+    repo_url: https://github.com/your-username/containerized_Ecommerce_Microservices-main.git
+
+  roles:
+    - docker
+    - deploy
+    - monitoring
