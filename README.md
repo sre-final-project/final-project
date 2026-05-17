@@ -151,6 +151,8 @@ Command used:
 ansible-playbook -i ansible/inventory.ini ansible/playbook.yml
 
 <img width="1182" height="375" alt="image" src="https://github.com/user-attachments/assets/e637fe02-5d3c-4763-a13a-7e73708bb8e1" />
+<img width="220" height="245" alt="image" src="https://github.com/user-attachments/assets/96438f8c-1972-4b6f-a77e-bead36d985a6" />
+
 
 
 # 9. SLI and SLO Design
