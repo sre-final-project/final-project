@@ -56,16 +56,11 @@ The application was deployed using Docker Compose.
 
 Commands used:
 
-```bash
 docker compose up -d --build
-Docker ps
-```
+docker ps
 
 Insert screenshots:
-
-[DOCKER COMPOSE SCREENSHOT]
-
-[DOCKER PS SCREENSHOT]
+![alt text](image.png)
 
 # 5. Docker Swarm Deployment
 
