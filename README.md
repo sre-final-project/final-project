@@ -271,13 +271,14 @@ Alerts were configured for:
 2. Service downtime
 3. Increased error rates
 
-Insert screenshots:
+<img width="974" height="526" alt="image" src="https://github.com/user-attachments/assets/77114529-f82a-411e-aa55-769d4366b147" />
 
-[PROMETHEUS TARGETS SCREENSHOT]
+<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/fc1814b4-4c72-4ecc-acd9-d5eec20a3d29" />
 
-[GRAFANA DASHBOARD SCREENSHOT]
+<img width="1496" height="798" alt="image" src="https://github.com/user-attachments/assets/526641f6-0ea9-4dcb-900a-6c72b906712d" />
 
-[ALERTS SCREENSHOT]
+<img width="974" height="521" alt="image" src="https://github.com/user-attachments/assets/f02d2052-e063-4068-a3ba-17c804f556d1" />
+
 
 # 11. Health Checks and Self-Healing
 
@@ -291,11 +292,11 @@ Examples:
 2. restart: unless-stopped
 3. automatic recovery
 
-Insert screenshots:
 
-[HEALTH CHECK SCREENSHOT]
+<img width="505" height="214" alt="image" src="https://github.com/user-attachments/assets/b0d382f0-06a6-419f-a127-44651339db7a" />
+<img width="717" height="141" alt="image" src="https://github.com/user-attachments/assets/36204b1a-ebc1-410f-bed8-03f331b36ee4" />
+<img width="691" height="503" alt="image" src="https://github.com/user-attachments/assets/df2959e2-fd75-4543-a737-6329389e0654" />
 
-[RESTART POLICY SCREENSHOT]
 
 # 12. Incident Simulation
 
@@ -317,18 +318,18 @@ Response steps:
 
 Commands used:
 
-```bash
 docker logs order-management
+
 docker restart order-management
-```
+
 
 Insert screenshots:
 
-[INCIDENT ALERT SCREENSHOT]
+<img width="973" height="578" alt="image" src="https://github.com/user-attachments/assets/ea1e2da8-0ccb-4d90-bad9-f2b05a4eae78" />
 
-[LOG ANALYSIS SCREENSHOT]
+<img width="1429" height="492" alt="image" src="https://github.com/user-attachments/assets/ea3fde3e-deaa-4105-85f2-42a2a1c916aa" />
 
-[RECOVERY SCREENSHOT]
+<img width="809" height="409" alt="image" src="https://github.com/user-attachments/assets/f36b39c7-a40f-49f5-8b7e-630fdc56d759" />
 
 # 13. Postmortem Analysis
 
