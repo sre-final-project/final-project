@@ -71,8 +71,11 @@ Docker Swarm was used for service orchestration and scaling.
 
 Commands used:
 docker swarm init
+
 docker stack deploy -c docker-stack.yml ecommerce
+
 docker service ls
+
 docker service scale ecommerce_order-management=3
 
 <img width="1215" height="309" alt="image" src="https://github.com/user-attachments/assets/79243903-e162-4ed2-ac0a-c3ef372183a8" />
@@ -92,13 +95,17 @@ The following resources were created:
 
 Commands used:
 kubectl apply -f k8s/
+
 kubectl get pods
+
 <img width="715" height="257" alt="image" src="https://github.com/user-attachments/assets/a03053ae-2413-4a46-bfad-598dec856a10" />
 
 kubectl get services
+
 <img width="750" height="257" alt="image" src="https://github.com/user-attachments/assets/4a2e4d14-ed19-405f-b6e6-0d81fb666490" />
 
 kubectl get deployments
+
 <img width="800" height="256" alt="image" src="https://github.com/user-attachments/assets/56346d7f-a367-4321-8b9f-dfb32886e738" />
 
 # 7. Terraform Infrastructure Provisioning
@@ -115,8 +122,11 @@ The Terraform configuration includes:
 Commands used:
 
 terraform init
+
 terraform plan
+
 terraform apply
+
 terraform output
 
 
