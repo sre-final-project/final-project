@@ -1,0 +1,51 @@
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+
+rule_files:
+  - '/etc/prometheus/alert-rules.yml'
+
+alerting:
+  alertmanagers:
+    - static_configs:
+        - targets:
+            - alertmanager:9093
+
+scrape_configs:
+  - job_name: 'prometheus'
+    static_configs:
+      - targets: ['prometheus:9090']
+
+  # Spring Boot Actuator - /actuator/prometheus
+  - job_name: 'order-management'
+    static_configs:
+      - targets: ['order-management:9090']
+    metrics_path: '/actuator/prometheus'
+
+  # Node.js with prom-client - /metrics
+  - job_name: 'product-catalog'
+    static_configs:
+      - targets: ['product-catalog:3001']
+    metrics_path: '/metrics'
+
+  - job_name: 'profile-management'
+    static_configs:
+      - targets: ['profile-management:3003']
+    metrics_path: '/metrics'
+
+  # Python Flask with prometheus_client - /metrics
+  - job_name: 'product-inventory'
+    static_configs:
+      - targets: ['product-inventory:3002']
+    metrics_path: '/metrics'
+
+  - job_name: 'contact-support-team'
+    static_configs:
+      - targets: ['contact-support-team:8000']
+    metrics_path: '/metrics'
+
+  # Go with promhttp - /metrics
+  - job_name: 'shipping-and-handling'
+    static_configs:
+      - targets: ['shipping-and-handling:8080']
+    metrics_path: '/metrics'

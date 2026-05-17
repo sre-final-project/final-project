@@ -1,0 +1,388 @@
+services:
+  # ==================== FRONTEND ====================
+  ecommerce-ui:
+    image: dntranstudy/ecommerce-ui:2.0.0
+    container_name: ecommerce-ui
+    ports:
+      - "4000:4000"
+    environment:
+      - REACT_APP_PROFILE_API_HOST=http://profile-management:3003
+      - REACT_APP_SHIPPING_API_HOST=http://shipping-and-handling:8080
+      - REACT_APP_CONTACT_API_HOST=http://contact-support-team:8000
+      - REACT_APP_INVENTORY_API_HOST=http://product-inventory:3002
+      - REACT_APP_PRODUCT_API_HOST=http://product-catalog:3001
+      - REACT_APP_ORDER_API_HOST=http://order-management:9090
+    depends_on:
+      profile-management:
+        condition: service_healthy
+      shipping-and-handling:
+        condition: service_healthy
+      contact-support-team:
+        condition: service_healthy
+      product-inventory:
+        condition: service_healthy
+      product-catalog:
+        condition: service_healthy
+      order-management:
+        condition: service_healthy
+    networks:
+      - app-network
+    restart: unless-stopped
+
+  # ==================== PROFILE MANAGEMENT ====================
+  profile-management:
+    build:
+      context: ./profile-management
+      dockerfile: Dockerfile
+    container_name: profile-management
+    ports:
+      - "3003:3003"
+    environment:
+      - MYSQL_PORT=3306
+      - MYSQL_HOST=mysql-profile-management
+      - MYSQL_DATABASE=profile_management
+      - MYSQL_USER=profile_user
+      - MYSQL_PASSWORD=profile_password
+    depends_on:
+      mysql-profile-management:
+        condition: service_healthy
+    networks:
+      - app-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "-q", "--spider", "http://localhost:3003/health"]
+      interval: 20s
+      timeout: 10s
+      retries: 5
+      start_period: 30s
+
+  mysql-profile-management:
+    image: mysql:8.0
+    container_name: mysql-profile-management
+    environment:
+      - MYSQL_DATABASE=profile_management
+      - MYSQL_ROOT_PASSWORD=root_password
+      - MYSQL_PASSWORD=profile_password
+      - MYSQL_USER=profile_user
+    volumes:
+      - mysql_profile_management_data:/var/lib/mysql
+    networks:
+      - app-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 15s
+      timeout: 10s
+      retries: 5
+      start_period: 60s
+
+  # ==================== SHIPPING AND HANDLING ====================
+  shipping-and-handling:
+    build:
+      context: ./shipping-and-handling
+      dockerfile: Dockerfile
+    container_name: shipping-and-handling
+    ports:
+      - "8080:8080"
+    depends_on:
+      mongodb-shipping:
+        condition: service_healthy
+    environment:
+      - MONGO_URI=mongodb://mongodb-shipping:27017/shipping
+    networks:
+      - app-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "-q", "--spider", "http://localhost:8080/health"]
+      interval: 20s
+      timeout: 10s
+      retries: 5
+      start_period: 30s
+
+  mongodb-shipping:
+    image: mongo:5.0
+    container_name: mongodb-shipping
+    volumes:
+      - mongodb_shipping_data:/data/db
+    environment:
+      - MONGO_INITDB_DATABASE=shipping
+    networks:
+      - app-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
+      interval: 15s
+      timeout: 10s
+      retries: 5
+      start_period: 30s
+
+  # ==================== CONTACT SUPPORT ====================
+  contact-support-team:
+    build:
+      context: ./contact-support-team
+      dockerfile: Dockerfile
+    container_name: contact-support-team
+    ports:
+      - "8000:8000"
+    depends_on:
+      mongodb-contact-support:
+        condition: service_healthy
+    environment:
+      - MONGODB_HOST=mongodb-contact-support
+      - MONGODB_PORT=27017
+      - MONGODB_DATABASE=contact_support
+    networks:
+      - app-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "python3", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/health')"]
+      interval: 20s
+      timeout: 10s
+      retries: 5
+      start_period: 30s
+
+  mongodb-contact-support:
+    image: mongo:5.0
+    container_name: mongodb-contact-support
+    volumes:
+      - mongodb_contact_support_data:/data/db
+    environment:
+      - MONGO_INITDB_DATABASE=contact_support
+    networks:
+      - app-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
+      interval: 15s
+      timeout: 10s
+      retries: 5
+      start_period: 30s
+
+  # ==================== PRODUCT INVENTORY ====================
+  product-inventory:
+    build:
+      context: ./product-inventory
+      dockerfile: Dockerfile
+    container_name: product-inventory
+    ports:
+      - "3002:3002"
+    environment:
+      - POSTGRES_HOST=postgres-product-inventory
+      - POSTGRES_PORT=5432
+      - POSTGRES_DB=product_inventory
+      - POSTGRES_USER=inventory_user
+      - POSTGRES_PASSWORD=inventory_password
+    depends_on:
+      postgres-product-inventory:
+        condition: service_healthy
+    networks:
+      - app-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "python3", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:3002/health')"]
+      interval: 20s
+      timeout: 10s
+      retries: 5
+      start_period: 30s
+
+  postgres-product-inventory:
+    image: postgres:14
+    container_name: postgres-product-inventory
+    environment:
+      - POSTGRES_DB=product_inventory
+      - POSTGRES_USER=inventory_user
+      - POSTGRES_PASSWORD=inventory_password
+    volumes:
+      - postgres_product_inventory_data:/var/lib/postgresql/data
+    networks:
+      - app-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U inventory_user"]
+      interval: 15s
+      timeout: 10s
+      retries: 5
+      start_period: 30s
+
+  # ==================== PRODUCT CATALOG ====================
+  product-catalog:
+    build:
+      context: ./product-catalog
+      dockerfile: Dockerfile
+    container_name: product-catalog
+    ports:
+      - "3001:3001"
+    depends_on:
+      mongodb-product-catalog:
+        condition: service_healthy
+    environment:
+      - MONGODB_HOST=mongodb-product-catalog
+      - MONGODB_PORT=27017
+      - MONGODB_DATABASE=product_catalog
+    networks:
+      - app-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "-q", "--spider", "http://localhost:3001/health"]
+      interval: 20s
+      timeout: 10s
+      retries: 5
+      start_period: 30s
+
+  mongodb-product-catalog:
+    image: mongo:5.0
+    container_name: mongodb-product-catalog
+    volumes:
+      - mongodb_product_catalog_data:/data/db
+    environment:
+      - MONGO_INITDB_DATABASE=product_catalog
+    networks:
+      - app-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
+      interval: 15s
+      timeout: 10s
+      retries: 5
+      start_period: 30s
+
+  # ==================== ORDER MANAGEMENT ====================
+  order-management:
+    build:
+      context: ./order-management
+      dockerfile: Dockerfile
+    container_name: order-management
+    ports:
+      - "8083:9090"
+    environment:
+      - PRODUCT_INVENTORY_API_HOST=http://product-inventory:3002
+      - PRODUCT_CATALOG_API_HOST=http://product-catalog:3001
+      - SHIPPING_HANDLING_API_HOST=http://shipping-and-handling:8080
+      - SPRING_DATA_MONGODB_URI=mongodb://mongodb-order-management:27017/order_management
+      - MANAGEMENT_ENDPOINTS_WEB_EXPOSURE_INCLUDE=health,info,prometheus,metrics
+      - MANAGEMENT_ENDPOINT_HEALTH_SHOW_DETAILS=always
+    depends_on:
+      product-inventory:
+        condition: service_healthy
+      product-catalog:
+        condition: service_healthy
+      shipping-and-handling:
+        condition: service_healthy
+      mongodb-order-management:
+        condition: service_healthy
+    networks:
+      - app-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "-q", "--spider", "http://localhost:9090/actuator/health"]
+      interval: 30s
+      timeout: 15s
+      retries: 5
+      start_period: 120s
+
+  mongodb-order-management:
+    image: mongo:5.0
+    container_name: mongodb-order-management
+    volumes:
+      - mongodb_order_management_data:/data/db
+    environment:
+      - MONGO_INITDB_DATABASE=order_management
+    networks:
+      - app-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
+      interval: 15s
+      timeout: 10s
+      retries: 5
+      start_period: 30s
+
+  # ==================== PROMETHEUS ====================
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: prometheus
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./monitoring/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - ./monitoring/alert-rules.yml:/etc/prometheus/alert-rules.yml:ro
+      - prometheus_data:/prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--storage.tsdb.retention.time=7d'
+      - '--web.console.libraries=/usr/share/prometheus/console_libraries'
+      - '--web.console.templates=/usr/share/prometheus/consoles'
+      - '--web.enable-lifecycle'
+    networks:
+      - app-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "-q", "--spider", "http://localhost:9090/-/healthy"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
+
+  # ==================== ALERTMANAGER ====================
+  alertmanager:
+    image: prom/alertmanager:latest
+    container_name: alertmanager
+    ports:
+      - "9093:9093"
+    volumes:
+      - ./monitoring/alertmanager.yml:/etc/alertmanager/alertmanager.yml:ro
+      - alertmanager_data:/alertmanager
+    command:
+      - '--config.file=/etc/alertmanager/alertmanager.yml'
+      - '--storage.path=/alertmanager'
+    networks:
+      - app-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "-q", "--spider", "http://localhost:9093/-/healthy"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
+
+  # ==================== GRAFANA ====================
+  grafana:
+    image: grafana/grafana:latest
+    container_name: grafana
+    ports:
+      - "3000:3000"
+    environment:
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+      - GF_USERS_ALLOW_SIGN_UP=false
+      - GF_INSTALL_PLUGINS=
+    volumes:
+      - grafana_data:/var/lib/grafana
+      # Provisioning: datasource config (no uid field)
+      - ./monitoring/grafana-datasources.yml:/etc/grafana/provisioning/datasources/datasources.yml:ro
+      # Provisioning: dashboard provider config only (no JSON files here)
+      - ./monitoring/grafana-dashboards/dashboards.yml:/etc/grafana/provisioning/dashboards/dashboards.yml:ro
+      # Dashboard JSON files mounted separately into /var/lib/grafana/dashboards
+      - ./monitoring/grafana-json-dashboards:/var/lib/grafana/dashboards:ro
+    depends_on:
+      prometheus:
+        condition: service_healthy
+    networks:
+      - app-network
+    restart: unless-stopped
+
+volumes:
+  mongodb_contact_support_data:
+  mongodb_order_management_data:
+  mongodb_product_catalog_data:
+  postgres_product_inventory_data:
+  mysql_profile_management_data:
+  mongodb_shipping_data:
+  prometheus_data:
+  grafana_data:
+  alertmanager_data:
+
+networks:
+  app-network:
+    driver: bridge

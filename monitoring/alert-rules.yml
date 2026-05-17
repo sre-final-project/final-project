@@ -1,0 +1,175 @@
+groups:
+  # ==================== SERVICE HEALTH ====================
+  - name: service_health
+    interval: 15s
+    rules:
+      - alert: ServiceDown
+        expr: up == 0
+        for: 1m
+        labels:
+          severity: critical
+          category: availability
+        annotations:
+          summary: "SERVICE DOWN: {{ $labels.job }}"
+          description: "{{ $labels.job }} has been unreachable for over 1 minute. Instance: {{ $labels.instance }}"
+          runbook: "1. Check docker logs {{ $labels.job }}  2. Verify DB connectivity  3. Restart if needed"
+
+      - alert: ServiceFlapping
+        expr: changes(up[10m]) > 4
+        for: 0m
+        labels:
+          severity: warning
+          category: availability
+        annotations:
+          summary: "SERVICE FLAPPING: {{ $labels.job }}"
+          description: "{{ $labels.job }} has changed state {{ $value }} times in the last 10 minutes — possible restart loop"
+
+  # ==================== CPU ====================
+  - name: cpu_alerts
+    interval: 30s
+    rules:
+      - alert: HighCPUUsage
+        expr: process_cpu_usage * 100 > 70
+        for: 2m
+        labels:
+          severity: warning
+          category: performance
+        annotations:
+          summary: "HIGH CPU: {{ $labels.job }} ({{ $value | printf \"%.1f\" }}%)"
+          description: "CPU usage on {{ $labels.job }} exceeded 70% for 2 minutes. Current: {{ $value | printf \"%.1f\" }}%"
+
+      - alert: CriticalCPUUsage
+        expr: process_cpu_usage * 100 > 90
+        for: 1m
+        labels:
+          severity: critical
+          category: performance
+        annotations:
+          summary: "CRITICAL CPU: {{ $labels.job }} ({{ $value | printf \"%.1f\" }}%)"
+          description: "CPU usage on {{ $labels.job }} exceeded 90%. Immediate action required."
+
+  # ==================== MEMORY ====================
+  - name: memory_alerts
+    interval: 30s
+    rules:
+      - alert: HighMemoryUsage
+        expr: process_resident_memory_bytes / 1024 / 1024 > 800
+        for: 5m
+        labels:
+          severity: warning
+          category: performance
+        annotations:
+          summary: "HIGH MEMORY: {{ $labels.job }} ({{ $value | printf \"%.0f\" }}MB)"
+          description: "Memory usage on {{ $labels.job }} exceeded 800MB for 5 minutes."
+
+      - alert: OrderServiceHighHeap
+        expr: jvm_memory_used_bytes{area="heap",job="order-management"} / jvm_memory_max_bytes{area="heap",job="order-management"} * 100 > 80
+        for: 3m
+        labels:
+          severity: warning
+          category: performance
+        annotations:
+          summary: "HIGH JVM HEAP: order-management ({{ $value | printf \"%.1f\" }}%)"
+          description: "JVM heap usage on order-management exceeded 80%. Risk of OutOfMemoryError."
+
+      - alert: OrderServiceHeapCritical
+        expr: jvm_memory_used_bytes{area="heap",job="order-management"} / jvm_memory_max_bytes{area="heap",job="order-management"} * 100 > 95
+        for: 1m
+        labels:
+          severity: critical
+          category: performance
+        annotations:
+          summary: "CRITICAL JVM HEAP: order-management ({{ $value | printf \"%.1f\" }}%)"
+          description: "JVM heap on order-management is at {{ $value | printf \"%.1f\" }}%. OOM imminent."
+
+  # ==================== ERROR RATE ====================
+  - name: error_rate_alerts
+    interval: 15s
+    rules:
+      - alert: HighErrorRate
+        expr: sum by (job) (rate(http_requests_total{status=~"5.."}[2m])) / sum by (job) (rate(http_requests_total[2m])) * 100 > 5
+        for: 1m
+        labels:
+          severity: warning
+          category: reliability
+        annotations:
+          summary: "HIGH ERROR RATE: {{ $labels.job }} ({{ $value | printf \"%.1f\" }}%)"
+          description: "Error rate on {{ $labels.job }} is {{ $value | printf \"%.1f\" }}% over the last 2 minutes (threshold: 5%)"
+
+      - alert: CriticalErrorRate
+        expr: sum by (job) (rate(http_requests_total{status=~"5.."}[2m])) / sum by (job) (rate(http_requests_total[2m])) * 100 > 15
+        for: 30s
+        labels:
+          severity: critical
+          category: reliability
+        annotations:
+          summary: "CRITICAL ERROR RATE: {{ $labels.job }} ({{ $value | printf \"%.1f\" }}%)"
+          description: "Error rate on {{ $labels.job }} reached {{ $value | printf \"%.1f\" }}%. SLO breach imminent."
+
+      - alert: SLOBreach
+        expr: (1 - sum by (job) (rate(http_requests_total{status=~"5.."}[5m])) / sum by (job) (rate(http_requests_total[5m]))) * 100 < 99
+        for: 2m
+        labels:
+          severity: critical
+          category: slo
+        annotations:
+          summary: "SLO BREACH: {{ $labels.job }} success rate {{ $value | printf \"%.2f\" }}% (< 99%)"
+          description: "Service {{ $labels.job }} is below the 99% success rate SLO."
+
+  # ==================== LATENCY ====================
+  - name: latency_alerts
+    interval: 30s
+    rules:
+      - alert: HighLatency
+        expr: histogram_quantile(0.95, sum by (job, le) (rate(http_request_duration_seconds_bucket[5m]))) > 1
+        for: 3m
+        labels:
+          severity: warning
+          category: performance
+        annotations:
+          summary: "HIGH LATENCY: {{ $labels.job }} p95={{ $value | printf \"%.3f\" }}s"
+          description: "P95 latency on {{ $labels.job }} exceeded 1 second for 3 minutes."
+
+      - alert: CriticalLatency
+        expr: histogram_quantile(0.95, sum by (job, le) (rate(http_request_duration_seconds_bucket[5m]))) > 3
+        for: 1m
+        labels:
+          severity: critical
+          category: performance
+        annotations:
+          summary: "CRITICAL LATENCY: {{ $labels.job }} p95={{ $value | printf \"%.3f\" }}s"
+          description: "P95 latency on {{ $labels.job }} exceeded 3 seconds. Service is degraded."
+
+  # ==================== ORDER SERVICE SPECIFIC ====================
+  - name: order_service_alerts
+    interval: 15s
+    rules:
+      - alert: OrderServiceDown
+        expr: up{job="order-management"} == 0
+        for: 30s
+        labels:
+          severity: critical
+          category: business
+        annotations:
+          summary: "CRITICAL: Order Management Service is DOWN"
+          description: "The Order Management service is unreachable. All new orders will fail. Immediate recovery required."
+
+      - alert: OrderServiceHighLoad
+        expr: sum(rate(http_requests_total{job="order-management"}[1m])) > 30
+        for: 2m
+        labels:
+          severity: warning
+          category: capacity
+        annotations:
+          summary: "ORDER SERVICE OVERLOAD: {{ $value | printf \"%.1f\" }} RPS"
+          description: "Order service is processing {{ $value | printf \"%.1f\" }} RPS. Consider horizontal scaling."
+
+      - alert: OrderServiceGCPressure
+        expr: rate(jvm_gc_pause_seconds_sum{job="order-management"}[1m]) > 0.1
+        for: 5m
+        labels:
+          severity: warning
+          category: performance
+        annotations:
+          summary: "ORDER SERVICE GC PRESSURE: {{ $value | printf \"%.3f\" }}s/s GC time"
+          description: "JVM garbage collection is consuming {{ $value | printf \"%.3f\" }}s per second on order-management."

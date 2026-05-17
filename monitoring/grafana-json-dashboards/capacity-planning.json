@@ -1,0 +1,207 @@
+{
+  "uid": "ecommerce-capacity",
+  "title": "Ecommerce - Capacity Planning",
+  "tags": ["ecommerce", "capacity", "sre"],
+  "timezone": "browser",
+  "schemaVersion": 38,
+  "refresh": "30s",
+  "time": { "from": "now-1h", "to": "now" },
+  "panels": [
+    {
+      "id": 1,
+      "title": "Order Service CPU Usage %",
+      "type": "gauge",
+      "gridPos": { "x": 0, "y": 0, "w": 6, "h": 6 },
+      "targets": [
+        { "expr": "process_cpu_usage{job=\"order-management\"} * 100", "refId": "A" }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "percent", "min": 0, "max": 100,
+          "thresholds": { "mode": "absolute", "steps": [
+            { "color": "green", "value": 0 },
+            { "color": "yellow", "value": 60 },
+            { "color": "red", "value": 80 }
+          ]},
+          "color": { "mode": "thresholds" }
+        }
+      },
+      "options": { "reduceOptions": { "calcs": ["lastNotNull"] }, "showThresholdLabels": true }
+    },
+    {
+      "id": 2,
+      "title": "Order Service Memory Usage",
+      "type": "gauge",
+      "gridPos": { "x": 6, "y": 0, "w": 6, "h": 6 },
+      "targets": [
+        { "expr": "jvm_memory_used_bytes{area=\"heap\",job=\"order-management\"} / jvm_memory_max_bytes{area=\"heap\",job=\"order-management\"} * 100", "legendFormat": "Heap %", "refId": "A" }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "percent", "min": 0, "max": 100,
+          "thresholds": { "mode": "absolute", "steps": [
+            { "color": "green", "value": 0 },
+            { "color": "yellow", "value": 70 },
+            { "color": "red", "value": 85 }
+          ]},
+          "color": { "mode": "thresholds" }
+        }
+      },
+      "options": { "reduceOptions": { "calcs": ["lastNotNull"] }, "showThresholdLabels": true }
+    },
+    {
+      "id": 3,
+      "title": "Requests Per Second - All Services",
+      "type": "gauge",
+      "gridPos": { "x": 12, "y": 0, "w": 6, "h": 6 },
+      "targets": [
+        { "expr": "sum(rate(http_requests_total[1m]))", "refId": "A" }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "reqps", "min": 0, "max": 100,
+          "thresholds": { "mode": "absolute", "steps": [
+            { "color": "green", "value": 0 },
+            { "color": "yellow", "value": 50 },
+            { "color": "red", "value": 80 }
+          ]},
+          "color": { "mode": "thresholds" }
+        }
+      },
+      "options": { "reduceOptions": { "calcs": ["lastNotNull"] }, "showThresholdLabels": true }
+    },
+    {
+      "id": 4,
+      "title": "Overall Error Rate %",
+      "type": "gauge",
+      "gridPos": { "x": 18, "y": 0, "w": 6, "h": 6 },
+      "targets": [
+        { "expr": "sum(rate(http_requests_total{status=~\"5..\"}[5m])) / sum(rate(http_requests_total[5m])) * 100", "refId": "A" }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "percent", "min": 0, "max": 100,
+          "thresholds": { "mode": "absolute", "steps": [
+            { "color": "green", "value": 0 },
+            { "color": "yellow", "value": 1 },
+            { "color": "red", "value": 5 }
+          ]},
+          "color": { "mode": "thresholds" }
+        }
+      },
+      "options": { "reduceOptions": { "calcs": ["lastNotNull"] }, "showThresholdLabels": true }
+    },
+    {
+      "id": 5,
+      "title": "CPU Usage Over Time - All Services",
+      "type": "timeseries",
+      "gridPos": { "x": 0, "y": 6, "w": 24, "h": 8 },
+      "targets": [
+        { "expr": "process_cpu_usage * 100", "legendFormat": "{{job}}", "refId": "A" }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "percent",
+          "custom": { "fillOpacity": 10 },
+          "thresholds": { "mode": "absolute", "steps": [
+            { "color": "green", "value": 0 },
+            { "color": "red", "value": 80 }
+          ]}
+        }
+      },
+      "options": {
+        "tooltip": { "mode": "multi" },
+        "legend": { "displayMode": "table", "placement": "bottom", "calcs": ["mean", "max", "lastNotNull"] }
+      }
+    },
+    {
+      "id": 6,
+      "title": "Memory Usage Over Time - All Services",
+      "type": "timeseries",
+      "gridPos": { "x": 0, "y": 14, "w": 24, "h": 8 },
+      "targets": [
+        { "expr": "process_resident_memory_bytes / 1024 / 1024", "legendFormat": "{{job}} RSS (MB)", "refId": "A" },
+        { "expr": "jvm_memory_used_bytes{area=\"heap\",job=\"order-management\"} / 1024 / 1024", "legendFormat": "order-management JVM heap (MB)", "refId": "B" }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "megabytes",
+          "custom": { "fillOpacity": 10 },
+          "color": { "mode": "palette-classic" }
+        }
+      },
+      "options": {
+        "tooltip": { "mode": "multi" },
+        "legend": { "displayMode": "table", "placement": "bottom", "calcs": ["mean", "max", "lastNotNull"] }
+      }
+    },
+    {
+      "id": 7,
+      "title": "Request Rate per Service (RPS)",
+      "type": "timeseries",
+      "gridPos": { "x": 0, "y": 22, "w": 12, "h": 8 },
+      "targets": [
+        { "expr": "sum by (job) (rate(http_requests_total[1m]))", "legendFormat": "{{job}}", "refId": "A" }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "reqps",
+          "color": { "mode": "palette-classic" }
+        }
+      },
+      "options": {
+        "tooltip": { "mode": "multi" },
+        "legend": { "displayMode": "table", "placement": "bottom", "calcs": ["mean", "max"] }
+      }
+    },
+    {
+      "id": 8,
+      "title": "Error Rate per Service",
+      "type": "timeseries",
+      "gridPos": { "x": 12, "y": 22, "w": 12, "h": 8 },
+      "targets": [
+        { "expr": "sum by (job) (rate(http_requests_total{status=~\"5..\"}[1m]))", "legendFormat": "{{job}} 5xx", "refId": "A" },
+        { "expr": "sum by (job) (rate(http_requests_total{status=~\"4..\"}[1m]))", "legendFormat": "{{job}} 4xx", "refId": "B" }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "reqps",
+          "custom": { "fillOpacity": 15 },
+          "color": { "mode": "palette-classic" }
+        }
+      }
+    },
+    {
+      "id": 9,
+      "title": "Response Time Heatmap - Order Service",
+      "type": "timeseries",
+      "gridPos": { "x": 0, "y": 30, "w": 24, "h": 8 },
+      "targets": [
+        { "expr": "histogram_quantile(0.50, sum by (le) (rate(http_request_duration_seconds_bucket{job=\"order-management\"}[5m])))", "legendFormat": "p50", "refId": "A" },
+        { "expr": "histogram_quantile(0.90, sum by (le) (rate(http_request_duration_seconds_bucket{job=\"order-management\"}[5m])))", "legendFormat": "p90", "refId": "B" },
+        { "expr": "histogram_quantile(0.99, sum by (le) (rate(http_request_duration_seconds_bucket{job=\"order-management\"}[5m])))", "legendFormat": "p99", "refId": "C" }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "s",
+          "color": { "mode": "palette-classic" },
+          "custom": { "fillOpacity": 10 }
+        }
+      },
+      "options": {
+        "tooltip": { "mode": "multi" },
+        "legend": { "displayMode": "table", "placement": "bottom", "calcs": ["mean", "max", "lastNotNull"] }
+      }
+    },
+    {
+      "id": 10,
+      "title": "Scaling Recommendation",
+      "type": "text",
+      "gridPos": { "x": 0, "y": 38, "w": 24, "h": 6 },
+      "options": {
+        "mode": "markdown",
+        "content": "## Scaling Thresholds & Recommendations\n\n| Service | CPU > 70% | Memory > 80% | RPS > 50 | Action |\n|---------|-----------|--------------|----------|--------|\n| **order-management** | Scale horizontally (3 replicas) | Increase JVM heap (-Xmx2g) | Add load balancer | **Priority: HIGH** |\n| **product-catalog** | Add replica | Increase container memory | Cache with Redis | Priority: Medium |\n| **product-inventory** | Add replica | Increase container memory | Connection pooling | Priority: Medium |\n| **profile-management** | Add replica | Increase container memory | Session cache | Priority: Low |\n\n**Auto-scaling trigger**: CPU > 70% for 2 minutes → add replica. CPU < 30% for 10 minutes → remove replica."
+      }
+    }
+  ]
+}
