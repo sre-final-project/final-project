@@ -148,13 +148,10 @@ The playbook performs:
 
 Command used:
 
-```bash
 ansible-playbook -i ansible/inventory.ini ansible/playbook.yml
-```
 
-Insert screenshot:
+<img width="1182" height="375" alt="image" src="https://github.com/user-attachments/assets/e637fe02-5d3c-4763-a13a-7e73708bb8e1" />
 
-[ANSIBLE SCREENSHOT]
 
 # 9. SLI and SLO Design
 
