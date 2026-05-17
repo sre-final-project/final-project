@@ -5,7 +5,7 @@ import('node-fetch').then(({ default: fetch }) => {
 
   router.get('/shipping-explanation', async (req, res) => {
     try {
-      const response = await fetch(`${SHIPPING_API_HOST}:8080/shipping-explanation`);
+      const response = await fetch(`${SHIPPING_API_HOST}/shipping-explanation`);
       if (!response.ok) {
         const errorData = await response.json();
         throw new Error(errorData.error);
@@ -20,7 +20,7 @@ import('node-fetch').then(({ default: fetch }) => {
 
   router.get('/all-shipping-fees', async (req, res) => {
     try {
-      const response = await fetch(`${SHIPPING_API_HOST}:8080/all-shipping-fees`);
+      const response = await fetch(`${SHIPPING_API_HOST}/all-shipping-fees`);
       if (!response.ok) {
         const errorData = await response.json();
         throw new Error(errorData.error);

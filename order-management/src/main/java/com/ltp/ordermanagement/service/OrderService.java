@@ -57,12 +57,12 @@ public class OrderService {
         }
 
         // Check the inventory of the product
-        InventoryResponse inventoryResponse = restTemplate.getForObject(productInventoryApiHost + ":3002/api/inventory/" + product.getId(), InventoryResponse.class);
+        InventoryResponse inventoryResponse = restTemplate.getForObject(productInventoryApiHost + "/api/inventory/" + product.getId(), InventoryResponse.class);
         if (inventoryResponse == null || inventoryResponse.getQuantity() <= 0) {
             return "Product is out of stock";
         }
 
-        Product productDetails = restTemplate.getForObject(productCatalogApiHost + ":3001/api/products/" + product.getId(), Product.class);
+        Product productDetails = restTemplate.getForObject(productCatalogApiHost + "/api/products/" + product.getId(), Product.class);
         // Add the product to the order
         CartItem cartItem = new CartItem(
             productDetails.getId(),
@@ -90,7 +90,7 @@ public class OrderService {
         List<CartItem> items = order.getItems();
         return items.stream()
                 .mapToDouble(item -> {
-                    Product product = restTemplate.getForObject(productCatalogApiHost + ":3001/api/products/" + item.getProductId(), Product.class);
+                    Product product = restTemplate.getForObject(productCatalogApiHost + "/api/products/" + item.getProductId(), Product.class);
                     return product.getPrice() * item.getQuantity();
                 })
                 .sum();
@@ -105,7 +105,7 @@ public class OrderService {
         List<CartItem> items = order.getItems();
         return items.stream()
                 .mapToDouble(item -> {
-                    Product product = restTemplate.getForObject(shippingHandlingApiHost + ":8080/shipping-fee?product_id=" + item.getProductId(), Product.class);
+                    Product product = restTemplate.getForObject(shippingHandlingApiHost + "/shipping-fee?product_id=" + item.getProductId(), Product.class);
                     if (product != null) {
                         return product.getShippingFee();
                     } else {
@@ -131,7 +131,7 @@ public class OrderService {
         // Update the inventory for each product in the order
         List<CartItem> items = order.getItems();
         for (CartItem item : items) {
-            restTemplate.postForObject(productInventoryApiHost + ":3002/api/order/" + item.getProductId(), item.getQuantity(), Void.class);
+            restTemplate.postForObject(productInventoryApiHost + "/api/order/" + item.getProductId(), item.getQuantity(), Void.class);
         }
 
         // Update the order status to "COMPLETED"

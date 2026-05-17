@@ -5,7 +5,7 @@ import('node-fetch').then(({ default: fetch }) => {
 
   router.post('/signup', async (req, res) => {
     try {
-      const response = await fetch(`${PROFILE_API_HOST}:3003/api/signup`, {
+      const response = await fetch(`${PROFILE_API_HOST}/api/signup`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -26,7 +26,7 @@ import('node-fetch').then(({ default: fetch }) => {
 
   router.post('/signin', async (req, res) => {
     try {
-      const response = await fetch(`${PROFILE_API_HOST}:3003/api/signin`, {
+      const response = await fetch(`${PROFILE_API_HOST}/api/signin`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -52,7 +52,7 @@ router.put('/profile', async (req, res) => {
         return res.status(401).json({ error: 'No token provided' });
       }
 
-      const response = await fetch(`${PROFILE_API_HOST}:3003/api/update`, {
+      const response = await fetch(`${PROFILE_API_HOST}/api/update`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',

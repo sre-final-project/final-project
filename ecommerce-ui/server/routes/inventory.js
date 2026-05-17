@@ -6,14 +6,14 @@ import('node-fetch').then(({ default: fetch }) => {
 
   router.get('/inventory', async (req, res) => {
     try {
-      const inventoryResponse = await fetch(`${INVENTORY_API_HOST}:3002/api/inventory`);
+      const inventoryResponse = await fetch(`${INVENTORY_API_HOST}/api/inventory`);
       if (!inventoryResponse.ok) {
         const errorData = await inventoryResponse.json();
         throw new Error(errorData.error);
       }
       const inventoryData = await inventoryResponse.json();
 
-      const productsResponse = await fetch(`${PRODUCT_API_HOST}:3001/api/products`);
+      const productsResponse = await fetch(`${PRODUCT_API_HOST}/api/products`);
       if (!productsResponse.ok) {
         const errorData = await productsResponse.json();
         throw new Error(errorData.error);
@@ -37,7 +37,7 @@ import('node-fetch').then(({ default: fetch }) => {
 
   router.get('/inventory/:id', async (req, res) => {
     try {
-      const response = await fetch(`${INVENTORY_API_HOST}:3002/api/inventory/${req.params.id}`);
+      const response = await fetch(`${INVENTORY_API_HOST}/api/inventory/${req.params.id}`);
       if (!response.ok) {
         const errorData = await response.json();
         throw new Error(errorData.error);

@@ -5,7 +5,7 @@ import('node-fetch').then(({ default: fetch }) => {
 
   router.get('/products', async (req, res) => {
     try {
-      const response = await fetch(`${PRODUCT_API_HOST}:3001/api/products`);
+      const response = await fetch(`${PRODUCT_API_HOST}/api/products`);
       if (!response.ok) {
         throw new Error('Failed to fetch products');
       }
@@ -19,7 +19,7 @@ import('node-fetch').then(({ default: fetch }) => {
 
   router.get('/products/:id', async (req, res) => {
     try {
-      const response = await fetch(`${PRODUCT_API_HOST}:3001/api/products/${req.params.id}`);
+      const response = await fetch(`${PRODUCT_API_HOST}/api/products/${req.params.id}`);
       if (!response.ok) {
         throw new Error('Failed to fetch product');
       }

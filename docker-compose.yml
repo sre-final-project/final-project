@@ -1,6 +1,9 @@
 services:
   # ==================== FRONTEND ====================
   ecommerce-ui:
+    build:
+      context: ./ecommerce-ui
+      dockerfile: Dockerfile
     image: dntranstudy/ecommerce-ui:2.0.0
     container_name: ecommerce-ui
     ports:

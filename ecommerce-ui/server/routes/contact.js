@@ -5,7 +5,7 @@ import('node-fetch').then(({ default: fetch }) => {
 
   router.get('/contact-message', async (req, res) => {
     try {
-      const response = await fetch(`${CONTACT_API_HOST}:8000/api/contact-message`);
+      const response = await fetch(`${CONTACT_API_HOST}/api/contact-message`);
       if (!response.ok) {
         const errorData = await response.json();
         throw new Error(errorData.error);
@@ -21,7 +21,7 @@ import('node-fetch').then(({ default: fetch }) => {
   router.post('/contact-submit', async (req, res) => {
     try {
       const { name, email, message } = req.body;
-      const response = await fetch(`${CONTACT_API_HOST}:8000/api/contact-submit`, {
+      const response = await fetch(`${CONTACT_API_HOST}/api/contact-submit`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ name, email, message }),

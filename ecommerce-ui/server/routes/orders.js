@@ -5,7 +5,7 @@ import('node-fetch').then(({ default: fetch }) => {
 
   router.post('/orders/:userId/cart', async (req, res) => {
     try {
-      const response = await fetch(`${ORDER_API_HOST}:9090/api/orders/${req.params.userId}/cart`, {
+      const response = await fetch(`${ORDER_API_HOST}/api/orders/${req.params.userId}/cart`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -26,7 +26,7 @@ import('node-fetch').then(({ default: fetch }) => {
   
   router.get('/orders/:userId/cart', async (req, res) => {
     try {
-      const response = await fetch(`${ORDER_API_HOST}:9090/api/orders/${req.params.userId}/cart`);
+      const response = await fetch(`${ORDER_API_HOST}/api/orders/${req.params.userId}/cart`);
       if (!response.ok) {
         const errorData = await response.text();
         throw new Error(errorData);
@@ -41,7 +41,7 @@ import('node-fetch').then(({ default: fetch }) => {
 
   router.get('/orders/:userId/cart/subtotal', async (req, res) => {
     try {
-      const response = await fetch(`${ORDER_API_HOST}:9090/api/orders/${req.params.userId}/cart/subtotal`);
+      const response = await fetch(`${ORDER_API_HOST}/api/orders/${req.params.userId}/cart/subtotal`);
       if (!response.ok) {
         const errorData = await response.text();
         throw new Error(errorData);
@@ -56,7 +56,7 @@ import('node-fetch').then(({ default: fetch }) => {
 
   router.get('/orders/:userId/cart/shipping', async (req, res) => {
     try {
-      const response = await fetch(`${ORDER_API_HOST}:9090/api/orders/${req.params.userId}/cart/shipping`);
+      const response = await fetch(`${ORDER_API_HOST}/api/orders/${req.params.userId}/cart/shipping`);
       if (!response.ok) {
         const errorData = await response.text();
         throw new Error(errorData);
@@ -71,7 +71,7 @@ import('node-fetch').then(({ default: fetch }) => {
 
   router.post('/orders/:userId/purchase', async (req, res) => {
     try {
-      const response = await fetch(`${ORDER_API_HOST}:9090/api/orders/${req.params.userId}/purchase`, {
+      const response = await fetch(`${ORDER_API_HOST}/api/orders/${req.params.userId}/purchase`, {
         method: 'POST',
       });
       if (!response.ok) {
