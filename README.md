@@ -91,21 +91,15 @@ The following resources were created:
 4. Pods
 
 Commands used:
-
-```bash
 kubectl apply -f k8s/
 kubectl get pods
+<img width="715" height="257" alt="image" src="https://github.com/user-attachments/assets/a03053ae-2413-4a46-bfad-598dec856a10" />
+
 kubectl get services
+<img width="750" height="257" alt="image" src="https://github.com/user-attachments/assets/4a2e4d14-ed19-405f-b6e6-0d81fb666490" />
+
 kubectl get deployments
-```
-
-Insert screenshots:
-
-[KUBERNETES PODS SCREENSHOT]
-
-[KUBERNETES SERVICES SCREENSHOT]
-
-[KUBERNETES DEPLOYMENTS SCREENSHOT]
+<img width="800" height="256" alt="image" src="https://github.com/user-attachments/assets/56346d7f-a367-4321-8b9f-dfb32886e738" />
 
 # 7. Terraform Infrastructure Provisioning
 
@@ -120,22 +114,16 @@ The Terraform configuration includes:
 
 Commands used:
 
-```bash
 terraform init
 terraform plan
 terraform apply
 terraform output
-```
 
-Insert screenshots:
 
-[TERRAFORM INIT SCREENSHOT]
+<img width="799" height="328" alt="image" src="https://github.com/user-attachments/assets/21991a98-9953-4c9c-a671-43308a04e70c" />
+<img width="742" height="378" alt="image" src="https://github.com/user-attachments/assets/1584dc79-f388-4d92-bb6d-caff434b06fe" />
 
-[TERRAFORM PLAN SCREENSHOT]
 
-[TERRAFORM APPLY SCREENSHOT]
-
-[TERRAFORM OUTPUT SCREENSHOT]
 
 # 8. Ansible Automation
 
