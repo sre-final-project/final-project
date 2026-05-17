@@ -35,6 +35,8 @@ The system consists of the following services:
 6. contact-support-team
 7. ecommerce-ui
 
+<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/a5d523c1-a91b-44a9-b189-175743f28fcd" />
+
 
 Databases:
 
@@ -60,8 +62,8 @@ Commands used:
 docker compose up -d --build
 docker ps
 
-Insert screenshots:
-![alt text](image.png)
+<img width="1623" height="312" alt="image" src="https://github.com/user-attachments/assets/4101f5f0-0340-4665-92d0-b974a530ac19" />
+
 
 # 5. Docker Swarm Deployment
 
