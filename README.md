@@ -323,8 +323,6 @@ docker logs order-management
 docker restart order-management
 
 
-Insert screenshots:
-
 <img width="973" height="578" alt="image" src="https://github.com/user-attachments/assets/ea1e2da8-0ccb-4d90-bad9-f2b05a4eae78" />
 
 <img width="1429" height="492" alt="image" src="https://github.com/user-attachments/assets/ea3fde3e-deaa-4105-85f2-42a2a1c916aa" />
@@ -412,7 +410,6 @@ Capacity planning conclusion:
 
 The system can be scaled horizontally by increasing replicas in Docker Swarm or Kubernetes. The order-management service should be scaled first because it handles order creation and depends on multiple services. The database layer should also be monitored carefully because it can become the main bottleneck during high traffic.
 
-Insert screenshots:
 
 <img width="1151" height="917" alt="image" src="https://github.com/user-attachments/assets/7cf2ab8d-4bf8-4e7b-9ff1-c41ff3941067" />
 
@@ -443,11 +440,12 @@ Docker Compose automates local deployment of all microservices, databases, and m
 
 The scripts folder provides additional operational automation. The load-test script is used to generate traffic for capacity planning. The log-inspector script is used to inspect service logs during incidents. The validate-config script is used to check configuration files before deployment.
 
-Insert screenshots:
+<img width="1134" height="894" alt="image" src="https://github.com/user-attachments/assets/255a2139-0780-4670-8db3-ef4c6288895f" />
+<img width="1197" height="403" alt="image" src="https://github.com/user-attachments/assets/1b2cb80c-69d0-480b-a098-42cbf9d400b2" />
 
-<img width="800" height="400" alt="image" src="ADD_AUTOMATION_SCRIPT_SCREENSHOT_HERE" />
 
-<img width="800" height="400" alt="image" src="ADD_LOG_INSPECTOR_SCREENSHOT_HERE" />
+<img width="1143" height="899" alt="image" src="https://github.com/user-attachments/assets/5009ed8d-679f-4e35-9bd8-dc16213cf1cf" />
+
 
 # 16. Results
 
