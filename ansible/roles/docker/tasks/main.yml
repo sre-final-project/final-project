@@ -12,13 +12,8 @@
       - gnupg
       - git
       - python3-pip
-    state: present
-
-- name: Install Docker engine and Compose plugin
-  ansible.builtin.apt:
-    name:
       - docker.io
-      - docker-compose-plugin
+      - docker-compose
     state: present
 
 - name: Ensure Docker service is enabled and running
