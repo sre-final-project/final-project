@@ -17,12 +17,10 @@
   become_user: ubuntu
 
 - name: Start ecommerce stack with Docker Compose
-  community.docker.docker_compose_v2:
-    project_src: "{{ app_dir }}"
-    files:
-      - "{{ compose_file }}"
-    build: always
-    state: present
+  ansible.builtin.shell:
+    cmd: docker compose up -d
+    chdir: "{{ app_dir }}"
+  become_user: ubuntu
 
 - name: Show running containers
   ansible.builtin.command:

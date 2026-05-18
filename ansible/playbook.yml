@@ -5,7 +5,7 @@
   vars:
     app_dir: /opt/ecommerce-microservices
     compose_file: docker-compose.yml
-    repo_url: https://github.com/your-username/containerized_Ecommerce_Microservices-main.git
+    repo_url: https://github.com/andronousss/final-project.git
 
   roles:
     - docker
