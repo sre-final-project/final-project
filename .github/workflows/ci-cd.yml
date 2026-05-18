@@ -1,0 +1,74 @@
+name: CI/CD Pipeline - Team 3
+
+on:
+  push:
+    branches: [ main, team3 ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    name: Build Docker Images
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build ecommerce-ui
+        run: docker build ./ecommerce-ui -t ecommerce-ui:latest
+
+      - name: Build profile-management
+        run: docker build ./profile-management -t profile-management:latest
+
+      - name: Build shipping-and-handling
+        run: docker build ./shipping-and-handling -t shipping-and-handling:latest
+
+      - name: Build contact-support-team
+        run: docker build ./contact-support-team -t contact-support-team:latest
+
+      - name: Build product-inventory
+        run: docker build ./product-inventory -t product-inventory:latest
+
+      - name: Build product-catalog
+        run: docker build ./product-catalog -t product-catalog:latest
+
+      - name: Build order-management
+        run: docker build ./order-management -t order-management:latest
+
+  validate:
+    name: Validate Configs
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Validate docker-compose.yml
+        run: docker compose config
+
+      - name: Validate Kubernetes manifests
+        run: |
+          curl -LO https://dl.k8s.io/release/v1.29.0/bin/linux/amd64/kubectl
+          chmod +x kubectl
+          ./kubectl apply --dry-run=client -f k8s/
+
+  health-check:
+    name: Health Check
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Check all Dockerfiles exist
+        run: |
+          for service in ecommerce-ui profile-management shipping-and-handling contact-support-team product-inventory product-catalog order-management; do
+            if [ -f "$service/Dockerfile" ]; then
+              echo "$service/Dockerfile exists"
+            else
+              echo "$service/Dockerfile missing"
+              exit 1
+            fi
+          done
