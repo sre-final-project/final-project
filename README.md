@@ -414,11 +414,12 @@ The system can be scaled horizontally by increasing replicas in Docker Swarm or 
 
 Insert screenshots:
 
-<img width="800" height="400" alt="image" src="ADD_LOAD_TEST_SCREENSHOT_HERE" />
+<img width="1151" height="917" alt="image" src="https://github.com/user-attachments/assets/7cf2ab8d-4bf8-4e7b-9ff1-c41ff3941067" />
 
-<img width="800" height="400" alt="image" src="ADD_DOCKER_STATS_SCREENSHOT_HERE" />
+<img width="957" height="379" alt="image" src="https://github.com/user-attachments/assets/29bc06d9-8bdf-4011-8ad2-0d555230d092" />
 
-<img width="800" height="400" alt="image" src="ADD_CAPACITY_GRAPH_SCREENSHOT_HERE" />
+<img width="1919" height="997" alt="image" src="https://github.com/user-attachments/assets/bfacc54a-cc13-40a1-a790-17aad9acd44f" />
+
 
 # 15. Automation
 
