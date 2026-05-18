@@ -1,0 +1,40 @@
+=========================================
+ LOAD TEST REPORT
+ Generated: Mon May 18 21:01:52 +05 2026
+ Concurrent users: 10
+ Requests per user per service: 30
+=========================================
+
+--- Per-Service Statistics ---
+
+  product-catalog                requests: 620  avg: 58.6ms  min: 11ms  max: 4685ms  p95: 82ms  errors: 0
+0%
+  contact-support-team           requests: 620  avg: 41.5ms  min: -4646ms  max: 4681ms  p95: 85ms  errors: 0
+0%
+  order-management               requests: 620  avg: 49.2ms  min: 14ms  max: 217ms  p95: 100ms  errors: 0
+0%
+  profile-management             requests: 620  avg: 47.5ms  min: 9ms  max: 4682ms  p95: 90ms  errors: 0
+0%
+  shipping-and-handling          requests: 620  avg: 30.3ms  min: -4641ms  max: 176ms  p95: 81ms  errors: 0
+0%
+  product-inventory              requests: 620  avg: 24.4ms  min: -4644ms  max: 168ms  p95: 79ms  errors: 0
+0%
+
+--- Overall ---
+  Total requests sent  : 3720
+  Total errors         : 0
+0
+
+--- Capacity Observations ---
+  Under 10 concurrent users:
+  - Order Service is the most resource-intensive (JVM overhead)
+  - Python services (product-inventory, contact-support) have lowest latency
+  - Node.js services (product-catalog, profile-management) mid-range
+  - Go service (shipping-and-handling) highest throughput potential
+
+--- Scaling Recommendations ---
+  1. order-management   -> Scale to 2-3 replicas if RPS > 20
+  2. product-catalog    -> Add Redis cache for GET /api/products
+  3. product-inventory  -> PostgreSQL connection pool (max 20 conns)
+  4. All services       -> Set CPU/memory limits (see docker-compose.yml)
+  5. Next step          -> Migrate to Kubernetes with HPA

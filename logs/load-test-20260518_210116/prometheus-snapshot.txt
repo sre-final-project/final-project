@@ -1,0 +1,153 @@
+=== CPU Usage ===
+{
+    "status": "success",
+    "data": {
+        "resultType": "vector",
+        "result": [
+            {
+                "metric": {
+                    "instance": "order-management:9090",
+                    "job": "order-management"
+                },
+                "value": [
+                    1779120111.891,
+                    "4.798414886285321"
+                ]
+            }
+        ]
+    }
+}
+
+=== Memory Usage (MB) ===
+{
+    "status": "success",
+    "data": {
+        "resultType": "vector",
+        "result": [
+            {
+                "metric": {
+                    "instance": "prometheus:9090",
+                    "job": "prometheus"
+                },
+                "value": [
+                    1779120111.955,
+                    "62.96875"
+                ]
+            },
+            {
+                "metric": {
+                    "instance": "profile-management:3003",
+                    "job": "profile-management"
+                },
+                "value": [
+                    1779120111.955,
+                    "40.43359375"
+                ]
+            },
+            {
+                "metric": {
+                    "instance": "product-catalog:3001",
+                    "job": "product-catalog"
+                },
+                "value": [
+                    1779120111.955,
+                    "54.375"
+                ]
+            },
+            {
+                "metric": {
+                    "instance": "shipping-and-handling:8080",
+                    "job": "shipping-and-handling"
+                },
+                "value": [
+                    1779120111.955,
+                    "14.45703125"
+                ]
+            },
+            {
+                "metric": {
+                    "instance": "contact-support-team:8000",
+                    "job": "contact-support-team"
+                },
+                "value": [
+                    1779120111.955,
+                    "32.52734375"
+                ]
+            },
+            {
+                "metric": {
+                    "instance": "product-inventory:3002",
+                    "job": "product-inventory"
+                },
+                "value": [
+                    1779120111.955,
+                    "31.87890625"
+                ]
+            }
+        ]
+    }
+}
+
+=== Request Rate (RPS) ===
+{
+    "status": "success",
+    "data": {
+        "resultType": "vector",
+        "result": [
+            {
+                "metric": {
+                    "job": "profile-management"
+                },
+                "value": [
+                    1779120112.01,
+                    "10.46071705033701"
+                ]
+            },
+            {
+                "metric": {
+                    "job": "product-catalog"
+                },
+                "value": [
+                    1779120112.01,
+                    "10.25942571646556"
+                ]
+            },
+            {
+                "metric": {
+                    "job": "contact-support-team"
+                },
+                "value": [
+                    1779120112.01,
+                    "8.687446111111111"
+                ]
+            },
+            {
+                "metric": {
+                    "job": "product-inventory"
+                },
+                "value": [
+                    1779120112.01,
+                    "8.595361142590495"
+                ]
+            },
+            {
+                "metric": {
+                    "job": "shipping-and-handling"
+                },
+                "value": [
+                    1779120112.01,
+                    "10.356836111111111"
+                ]
+            }
+        ]
+    }
+}
+
+=== Error Rate ===
+{
+    "status": "success",
+    "data": {
+        "resultType": "vector",
+        "result": []
+    }
+}
