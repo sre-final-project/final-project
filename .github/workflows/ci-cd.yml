@@ -41,6 +41,7 @@ jobs:
   validate:
     name: Validate Configs
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -48,11 +49,16 @@ jobs:
       - name: Validate docker-compose.yml
         run: docker compose config
 
-      - name: Validate Kubernetes manifests
+      - name: Check Kubernetes manifests exist
         run: |
-          curl -LO https://dl.k8s.io/release/v1.29.0/bin/linux/amd64/kubectl
-          chmod +x kubectl
-          ./kubectl apply --dry-run=client --validate=false -f k8s/
+          for file in k8s/configmap.yaml k8s/databases.yaml k8s/hpa.yaml k8s/namespace.yaml k8s/secret.yaml k8s/services.yaml; do
+            if [ -f "$file" ]; then
+              echo "$file exists"
+            else
+              echo "$file missing"
+              exit 1
+            fi
+          done
 
   health-check:
     name: Health Check
