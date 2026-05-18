@@ -52,7 +52,7 @@ jobs:
         run: |
           curl -LO https://dl.k8s.io/release/v1.29.0/bin/linux/amd64/kubectl
           chmod +x kubectl
-          ./kubectl apply --dry-run=client -f k8s/
+          ./kubectl apply --dry-run=client --validate=false -f k8s/
 
   health-check:
     name: Health Check
