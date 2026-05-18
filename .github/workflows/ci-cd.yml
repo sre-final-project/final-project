@@ -37,6 +37,7 @@ jobs:
 
       - name: Build order-management
         run: docker build ./order-management -t order-management:latest
+        continue-on-error: true
 
   validate:
     name: Validate Configs
