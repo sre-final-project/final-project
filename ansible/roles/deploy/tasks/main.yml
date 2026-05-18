@@ -18,13 +18,13 @@
 
 - name: Start ecommerce stack with Docker Compose
   ansible.builtin.shell:
-    cmd: docker compose up -d
+    cmd: docker-compose up -d
     chdir: "{{ app_dir }}"
   become_user: ubuntu
 
 - name: Show running containers
   ansible.builtin.command:
-    cmd: docker compose ps
+    cmd: docker-compose ps
     chdir: "{{ app_dir }}"
   register: compose_ps
   changed_when: false
