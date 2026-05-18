@@ -57,6 +57,9 @@ Monitoring:
 
 The application was deployed using Docker Compose.
 
+<img width="1084" height="929" alt="image" src="https://github.com/user-attachments/assets/3a578843-aad8-4213-a1d2-d12bc3363178" />
+
+
 Commands used:
 
 docker compose up -d --build
@@ -68,6 +71,9 @@ docker ps
 # 5. Docker Swarm Deployment
 
 Docker Swarm was used for service orchestration and scaling.
+
+<img width="987" height="971" alt="image" src="https://github.com/user-attachments/assets/1f7fdf09-decd-4db8-ba19-0310288a79c5" />
+
 
 Commands used:
 docker swarm init
@@ -85,6 +91,12 @@ docker service scale ecommerce_order-management=3
 # 6. Kubernetes Deployment
 
 Kubernetes was used for advanced orchestration and declarative deployments.
+
+<img width="955" height="980" alt="image" src="https://github.com/user-attachments/assets/9bcccecb-8d5f-4d80-a47d-b9d378f746d4" />
+<img width="984" height="960" alt="image" src="https://github.com/user-attachments/assets/7448d624-e0ce-4fec-8172-d5f28150bd92" />
+<img width="373" height="455" alt="image" src="https://github.com/user-attachments/assets/ad4e9b2f-313d-46f8-bb20-3155fa10618a" />
+<img width="696" height="423" alt="image" src="https://github.com/user-attachments/assets/f9d9bee8-5073-4e55-8052-dd9d1c507edb" />
+
 
 The following resources were created:
 
@@ -112,6 +124,15 @@ kubectl get deployments
 
 Terraform was used to provision cloud infrastructure resources.
 
+
+<img width="949" height="984" alt="image" src="https://github.com/user-attachments/assets/270d6f64-3890-41df-963c-c4f4c585e93e" />
+
+<img width="920" height="973" alt="image" src="https://github.com/user-attachments/assets/85c422a1-865a-4d2a-9fcc-8c67e96b6ad6" />
+
+<img width="930" height="933" alt="image" src="https://github.com/user-attachments/assets/6533811e-52d6-4c87-9f57-21e8d9eac101" />
+
+
+
 The Terraform configuration includes:
 
 1. Virtual machine provisioning
@@ -131,13 +152,20 @@ terraform output
 
 
 <img width="799" height="328" alt="image" src="https://github.com/user-attachments/assets/21991a98-9953-4c9c-a671-43308a04e70c" />
-<img width="742" height="378" alt="image" src="https://github.com/user-attachments/assets/1584dc79-f388-4d92-bb6d-caff434b06fe" />
 
+<img width="742" height="378" alt="image" src="https://github.com/user-attachments/assets/1584dc79-f388-4d92-bb6d-caff434b06fe" />
 
 
 # 8. Ansible Automation
 
 Ansible was used to automate deployment and configuration management.
+
+<img width="842" height="398" alt="image" src="https://github.com/user-attachments/assets/adc7cfc3-3e97-44e3-a15a-cfda5934256c" />
+
+<img width="514" height="786" alt="image" src="https://github.com/user-attachments/assets/c5e70cfa-7a24-4a26-bbd2-a57ad541462d" />
+<img width="553" height="759" alt="image" src="https://github.com/user-attachments/assets/d484a78e-5615-4447-822b-9c23a170d5d5" />
+<img width="463" height="626" alt="image" src="https://github.com/user-attachments/assets/0b9df89e-383a-492e-89aa-1fcf9f3151cd" />
+
 
 The playbook performs:
 
@@ -256,6 +284,10 @@ This SLI provides a high-level reliability indicator for the complete e-commerce
 # 10. Monitoring and Alerting
 
 Prometheus was used for metrics collection and Grafana was used for visualization.
+
+<img width="619" height="973" alt="image" src="https://github.com/user-attachments/assets/f2dc26e7-0b00-4b83-a586-de039b61f743" />
+<img width="1014" height="675" alt="image" src="https://github.com/user-attachments/assets/bff08a3a-b0c3-437e-b73d-d5c3e71c2040" />
+
 
 The following metrics were monitored:
 
@@ -410,8 +442,7 @@ Capacity planning conclusion:
 
 The system can be scaled horizontally by increasing replicas in Docker Swarm or Kubernetes. The order-management service should be scaled first because it handles order creation and depends on multiple services. The database layer should also be monitored carefully because it can become the main bottleneck during high traffic.
 
-
-<img width="1151" height="917" alt="image" src="https://github.com/user-attachments/assets/7cf2ab8d-4bf8-4e7b-9ff1-c41ff3941067" />
+<img width="1000" height="788" alt="image" src="https://github.com/user-attachments/assets/338e938b-6cde-4930-bb06-f9e4bb9a38d4" />
 
 <img width="957" height="379" alt="image" src="https://github.com/user-attachments/assets/29bc06d9-8bdf-4011-8ad2-0d555230d092" />
 
