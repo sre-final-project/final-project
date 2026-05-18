@@ -335,19 +335,50 @@ Insert screenshots:
 
 Summary:
 
+The simulated incident affected the order-management service. The service became unavailable because of an incorrect MongoDB database configuration. As a result, order-related requests failed, while the other microservices continued running.
+
 Timeline:
+
+1. Incorrect database configuration was introduced for order-management
+2. Order-management service became unhealthy
+3. Prometheus and Grafana showed service degradation
+4. Docker logs were checked to investigate the issue
+5. The database configuration was fixed
+6. The order-management service was restarted
+7. Health checks confirmed that the service recovered
 
 Root Cause:
 
+The root cause was an incorrect MongoDB connection configuration in the order-management service. Because of this, the service could not connect to its database dependency.
+
 Detection:
+
+The incident was detected using Prometheus metrics, Grafana dashboards, Docker container status, and service health checks.
 
 Resolution:
 
+The incorrect database configuration was corrected. After that, the order-management service was restarted and its health endpoint became available again.
+
 What went well:
+
+1. Monitoring helped detect the issue
+2. Logs showed that the problem was related to the database connection
+3. Health checks made it easy to verify recovery
+4. The system was restored without rebuilding all services
 
 What went wrong:
 
+1. The order-management service became unavailable
+2. The configuration problem was detected only after the service failed
+3. Recovery required manual log inspection and restart
+
 Preventive actions:
+
+1. Add configuration validation before deployment
+2. Add stronger alerts for database connection failures
+3. Use readiness probes to prevent traffic from going to unhealthy services
+4. Store database settings in environment variables or secrets
+5. Add automated smoke tests after deployment
 
 # 14. Capacity Planning
 
@@ -364,20 +395,30 @@ Results:
 1. Order-management service showed the highest CPU usage
 2. Database became the primary bottleneck
 3. Response time increased during high load
+4. Services with database dependencies were more sensitive to increased traffic
+5. Monitoring showed that scaling backend services can reduce request delays
 
 Scaling strategies:
 
 1. Horizontal scaling
 2. Vertical scaling
 3. Database optimization
+4. Add replicas for order-management and product-catalog
+5. Increase CPU and memory limits for services with high resource usage
+6. Use database indexing and connection pooling
+7. Move stateful databases to managed or dedicated infrastructure in production
+
+Capacity planning conclusion:
+
+The system can be scaled horizontally by increasing replicas in Docker Swarm or Kubernetes. The order-management service should be scaled first because it handles order creation and depends on multiple services. The database layer should also be monitored carefully because it can become the main bottleneck during high traffic.
 
 Insert screenshots:
 
-[LOAD TEST SCREENSHOT]
+<img width="800" height="400" alt="image" src="ADD_LOAD_TEST_SCREENSHOT_HERE" />
 
-[DOCKER STATS SCREENSHOT]
+<img width="800" height="400" alt="image" src="ADD_DOCKER_STATS_SCREENSHOT_HERE" />
 
-[CAPACITY GRAPH SCREENSHOT]
+<img width="800" height="400" alt="image" src="ADD_CAPACITY_GRAPH_SCREENSHOT_HERE" />
 
 # 15. Automation
 
@@ -395,11 +436,17 @@ Scripts used:
 2. log-inspector.sh
 3. validate-config.sh
 
+Automation details:
+
+Docker Compose automates local deployment of all microservices, databases, and monitoring tools. Docker Swarm automates service replication and restart policies. Kubernetes automates declarative deployment, service discovery, health checks, and horizontal scaling. Terraform automates infrastructure provisioning, including network configuration, security groups, SSH key pair, and virtual machine creation. Ansible automates server configuration, Docker installation, application deployment, and monitoring verification.
+
+The scripts folder provides additional operational automation. The load-test script is used to generate traffic for capacity planning. The log-inspector script is used to inspect service logs during incidents. The validate-config script is used to check configuration files before deployment.
+
 Insert screenshots:
 
-[AUTOMATION SCRIPT SCREENSHOT]
+<img width="800" height="400" alt="image" src="ADD_AUTOMATION_SCRIPT_SCREENSHOT_HERE" />
 
-[LOG INSPECTOR SCREENSHOT]
+<img width="800" height="400" alt="image" src="ADD_LOG_INSPECTOR_SCREENSHOT_HERE" />
 
 # 16. Results
 
