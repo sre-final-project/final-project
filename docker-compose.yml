@@ -9,7 +9,7 @@ services:
     ports:
       - "4000:4000"
     environment:
-      - REACT_APP_PROFILE_API_HOST=http://profile-management:3003
+      - REACT_APP_PROFILE_API_HOST=http://profile-management
       - REACT_APP_SHIPPING_API_HOST=http://shipping-and-handling:8080
       - REACT_APP_CONTACT_API_HOST=http://contact-support-team:8000
       - REACT_APP_INVENTORY_API_HOST=http://product-inventory:3002

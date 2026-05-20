@@ -1,7 +1,13 @@
 import express from 'express';
 const router = express.Router();
 import('node-fetch').then(({ default: fetch }) => {
-  const PROFILE_API_HOST = process.env.REACT_APP_PROFILE_API_HOST;
+  const PROFILE_API_HOST = normalizeProfileApiHost(process.env.REACT_APP_PROFILE_API_HOST);
+
+  function normalizeProfileApiHost(value) {
+    const host = value || 'http://profile-management';
+    const cleanedHost = host.replace(/\/+$/, '');
+    return /:\d+$/.test(cleanedHost) ? cleanedHost : `${cleanedHost}:3003`;
+  }
 
   router.post('/signup', async (req, res) => {
     try {
