@@ -11,7 +11,8 @@ GITHUB REPOSITORY LINK -> https://github.com/andronousss/final-project.git
 
 This project demonstrates the implementation of Site Reliability Engineering (SRE) practices in a distributed microservices-based system. The system includes containerized services, monitoring, infrastructure automation, incident response, and capacity planning. Docker Compose, Docker Swarm, Kubernetes, Terraform, and Ansible were used to demonstrate orchestration, automation, and infrastructure management.
 
-The project also includes Prometheus and Grafana monitoring, alerting mechanisms, automated deployment, incident simulation, and scaling analysis.
+The project also includes Prometheus and Grafana monitoring, alerting mechanisms, automated deployment, incident simulation, and scaling analysis. Continuous Integration and Continuous Deployment (CI/CD) practices
+were also implemented using GitHub Actions to automate build, validation, and deployment workflows.
 
 # 2. Objectives
 
@@ -450,8 +451,88 @@ The system can be scaled horizontally by increasing replicas in Docker Swarm or 
 
 <img width="1919" height="997" alt="image" src="https://github.com/user-attachments/assets/bfacc54a-cc13-40a1-a790-17aad9acd44f" />
 
+# 15. CI/CD Pipeline Automation
 
-# 15. Automation
+CI/CD practices were implemented to automate application build, validation, containerization, and deployment
+processes. GitHub Actions was used to create automated workflows triggered by repository updates.
+
+<img width="1444" height="685" alt="image" src="https://github.com/user-attachments/assets/21e3149e-e103-495a-a01f-f88f91d2e4c3" />
+
+
+The CI/CD pipeline performs the following tasks:
+• Source code checkout from GitHub repository
+• Docker image building for microservices
+• Configuration and deployment validation
+• Automated container image publishing
+• Deployment automation
+• Health verification after deployment
+The pipeline improves deployment consistency, reduces manual operational work, and minimizes configurationrelated failures.
+
+CI/CD Workflow
+
+<img width="1447" height="586" alt="image" src="https://github.com/user-attachments/assets/af7e6bb3-35e5-4407-92ed-0f6faaf77542" />
+
+<img width="1450" height="596" alt="image" src="https://github.com/user-attachments/assets/31a9bdea-1086-412c-a44c-a454cd5cfc0c" />
+
+The implemented workflow follows these stages:
+• Developer pushes code to GitHub
+• GitHub Actions automatically starts the workflow
+• Docker images are built for services
+• Validation checks are executed
+• Images are pushed to Docker Hub
+• Services are deployed automatically
+• Monitoring and health checks verify deployment status
+
+Environment variables and deployment configuration were securely managed using GitHub repository settings and
+secrets.
+
+<img width="1448" height="554" alt="image" src="https://github.com/user-attachments/assets/2f857986-c3e6-4e87-8802-60efa8930483" />
+
+
+Technologies Used:
+• GitHub Actions
+• Docker
+• Docker Hub
+• Docker Compose
+• Kubernetes
+• Ansible
+
+CI/CD Benefits:
+• Faster deployment process
+• Reduced manual configuration errors
+• Automated validation before deployment
+• Improved deployment reliability
+• Easier rollback and recovery
+• Better operational consistency
+
+<img width="1450" height="644" alt="image" src="https://github.com/user-attachments/assets/57b6bd06-e9c0-4625-9ceb-95b5394ef549" />
+
+
+Example Workflow Steps
+
+Checkout repository -> Build Docker images -> Validate configuration -> Push images to Docker Hub -> Deploy
+services -> Verify health endpoints
+
+<img width="1448" height="504" alt="image" src="https://github.com/user-attachments/assets/badd2fe4-14a9-4881-927a-b038747a7c5f" />
+
+
+Integration with Monitoring:
+The CI/CD pipeline is integrated with monitoring and health verification mechanisms. After deployment,
+Prometheus and Grafana are used to verify service availability and detect failures or abnormal behavior. Health
+check endpoints confirm that deployed services are operational before the deployment process is considered
+successful.
+
+<img width="1323" height="855" alt="image" src="https://github.com/user-attachments/assets/a3b59909-9145-4418-b537-1e789a0e2280" />
+
+
+Conclusion:
+The implemented CI/CD pipeline improves automation, deployment speed, and operational reliability. Automated
+workflows reduce downtime risks and support continuous delivery practices within the distributed microservices
+environment.
+
+
+
+# 16. Automation
 
 The project includes several automation mechanisms:
 
@@ -491,9 +572,10 @@ The project successfully demonstrates:
 5. Monitoring and alerting
 6. Incident response and recovery
 7. Capacity planning and scaling analysis
+8. CI/CD pipeline automation using GitHub Actions
 
 # 17. Conclusion
 
-This project demonstrates the implementation of Site Reliability Engineering practices in a distributed microservices environment. The system integrates orchestration, infrastructure automation, monitoring, incident response, and scalability strategies.
+This project demonstrates the implementation of Site Reliability Engineering practices in a distributed microservices environment. The system integrates orchestration, infrastructure automation, monitoring, incident response, and scalability strategies. The addition of CI/CD workflows further improved deployment automation, operational consistency, and system reliability
 
 The final solution improves reliability, maintainability, and operational efficiency while demonstrating practical SRE concepts.
