@@ -4,7 +4,7 @@ Comprehensive SRE Implementation for a Distributed Microservices System
 
 Alexander Andreyev, Temirlan Turar, Yerkhan Sapabek, Ali Sharshiken
 
-GITHUB REPOSITORY LINK -> https://github.com/andronousss/final-project.git
+GITHUB REPOSITORY LINK -> https://github.com/sre-final-project/final-project.git
 
 
 # 1. Abstract
